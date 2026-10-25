@@ -19,7 +19,6 @@
                 <h1 class="text-2xl font-bold text-gray-800">Control Presupuesto</h1>
                 <p class="text-sm text-gray-500">Hoteles Brasil 2027</p>
             </div>
-            <!-- Sin onsubmit inline para evitar fallos de carga en módulos -->
             <form id="loginForm" class="space-y-4">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Usuario</label>
@@ -61,19 +60,19 @@
                     </div>
                 </div>
 
-                <!-- Barra 1: Progreso de Recaudación (Creciente) -->
+                <!-- Barra 1: Progreso de Recaudación (Creciente de 0% hacia adelante) -->
                 <div class="w-full bg-gray-200 rounded-full h-4 overflow-hidden shadow-inner relative">
                     <div id="progressBar" class="bg-green-600 h-full transition-all duration-500 text-right text-xs text-white font-bold pr-2 flex items-center justify-end" style="width: 0%">0%</div>
                 </div>
 
-                <!-- Barra 2: Saldo Pendiente de Metas (Decreciente con Desglose) -->
+                <!-- Barra 2: Saldo Pendiente de Metas (Decreciente: Comienza llena al tope y descuenta hacia 0%) -->
                 <div class="pt-2 border-t border-gray-100 flex flex-col gap-1">
                     <div class="flex justify-between items-center text-xs font-semibold text-gray-700">
                         <span><i class="fa-solid fa-chart-pie text-orange-500 mr-1"></i> Saldo Pendiente de las Metas: <span id="nombresMetasResumen" class="text-gray-500 font-normal"></span></span>
                         <span id="saldoRestanteText" class="text-orange-600 font-bold">$0 ARS</span>
                     </div>
                     <div class="w-full bg-gray-200 rounded-full h-3 overflow-hidden shadow-inner relative">
-                        <div id="progressRestanteBar" class="bg-orange-500 h-full transition-all duration-500" style="width: 100%"></div>
+                        <div id="progressRestanteBar" class="bg-orange-500 h-full transition-all duration-500 text-right text-[10px] text-white font-bold pr-1" style="width: 100%">100%</div>
                     </div>
                 </div>
             </div>
@@ -192,7 +191,6 @@
 
         let editandoId = null;
 
-        // Listener robusto para el formulario de Login
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const u = document.getElementById('userInput').value;
@@ -259,6 +257,20 @@
                 document.getElementById('totalRecaudadoText').innerText = `$${totalRecaudado.toLocaleString()} ARS`;
                 document.getElementById('headerRecaudadoText').innerText = `$${totalRecaudado.toLocaleString()}`;
 
+                // Barra 1: Creciente de recaudación (0% a 100%)
+                let porcentaje = totalMetas > 0 ? Math.min(Math.round((totalRecaudado / totalMetas) * 100), 100) : 0;
+                const bar = document.getElementById('progressBar');
+                bar.style.width = `${porcentaje}%`;
+                bar.innerText = `${porcentaje}%`;
+
+                // Barra 2: Saldo Pendiente (Decreciente: Comienza llena al 100% y se reduce descontando el progreso)
+                let saldoRestante = Math.max(totalMetas - totalRecaudado, 0);
+                let porcentajeRestante = totalMetas > 0 ? Math.max(Math.round((saldoRestante / totalMetas) * 100), 0) : 0;
+                document.getElementById('saldoRestanteText').innerText = `$${saldoRestante.toLocaleString()} ARS`;
+                const barRestante = document.getElementById('progressRestanteBar');
+                barRestante.style.width = `${porcentajeRestante}%`;
+                barRestante.innerText = `${porcentajeRestante}%`;
+
                 // Event Listeners dinámicos para Editar y Eliminar
                 document.querySelectorAll('.btn-editar').forEach(btn => {
                     btn.addEventListener('click', () => {
@@ -284,25 +296,11 @@
                     });
                 });
 
-                // Barra 1 (Creciente)
-                let porcentaje = totalMetas > 0 ? Math.min(Math.round((totalRecaudado / totalMetas) * 100), 100) : 0;
-                const bar = document.getElementById('progressBar');
-                bar.style.width = `${porcentaje}%`;
-                bar.innerText = `${porcentaje}%`;
-
-                // Barra 2 (Decreciente - Saldo Restante)
-                let saldoRestante = Math.max(totalMetas - totalRecaudado, 0);
-                let porcentajeRestante = totalMetas > 0 ? Math.max(Math.round((saldoRestante / totalMetas) * 100), 0) : 0;
-                document.getElementById('saldoRestanteText').innerText = `$${saldoRestante.toLocaleString()} ARS`;
-                const barRestante = document.getElementById('progressRestanteBar');
-                barRestante.style.width = `${porcentajeRestante}%`;
-
             } catch (error) {
                 console.error("Error al cargar datos:", error);
             }
         }
 
-        // Event Listener para actualizar metas
         document.getElementById('btnGuardarMetas').addEventListener('click', async function() {
             const nombreMeta1 = document.getElementById('nombreMeta1').value;
             const nombreMeta2 = document.getElementById('nombreMeta2').value;
@@ -323,7 +321,6 @@
             }
         });
 
-        // Event Listener para guardar transacción
         document.getElementById('transaccionForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             const fecha = document.getElementById('tFecha').value;
