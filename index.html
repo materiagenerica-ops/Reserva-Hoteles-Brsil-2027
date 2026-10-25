@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Control Presupuesto Hoteles Brasil 2027</title>
-    <!-- Tailwind CSS Versión Compilada de Producción -->
+    <!-- Tailwind CSS de Producción -->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <!-- FontAwesome para iconos -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -99,4 +99,200 @@
                     <!-- Meta 2 -->
                     <div class="p-4 border rounded-lg bg-gray-50 space-y-2">
                         <label class="block text-xs font-semibold text-gray-600">Nombre Meta 2</label>
-                        <input type="text" id="nombreMeta2"
+                        <input type="text" id="nombreMeta2" class="w-full px-3 py-1.5 border rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-green-600" placeholder="Ej: Hotel Secundario">
+                        <label class="block text-xs font-semibold text-gray-600">Valor (ARS)</label>
+                        <input type="number" id="meta2" class="w-full px-3 py-1.5 border rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-green-600" placeholder="0">
+                    </div>
+                    <!-- Meta 3 -->
+                    <div class="p-4 border rounded-lg bg-gray-50 space-y-2">
+                        <label class="block text-xs font-semibold text-gray-600">Nombre Meta 3</label>
+                        <input type="text" id="nombreMeta3" class="w-full px-3 py-1.5 border rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-green-600" placeholder="Ej: Contingencia">
+                        <label class="block text-xs font-semibold text-gray-600">Valor (ARS)</label>
+                        <input type="number" id="meta3" class="w-full px-3 py-1.5 border rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-green-600" placeholder="0">
+                    </div>
+                </div>
+                <div class="mt-4 pt-4 border-t flex justify-between text-sm text-gray-600">
+                    <span>Suma Total Metas: <strong id="totalMetasText" class="text-gray-900">$0 ARS</strong></span>
+                    <span>Total Recaudado: <strong id="totalRecaudadoText" class="text-green-600">$0 ARS</strong></span>
+                </div>
+            </section>
+
+            <!-- SECCIÓN 2: REGISTRO DE INGRESOS -->
+            <section class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                <h3 class="text-lg font-bold text-gray-800 mb-4"><i class="fa-solid fa-cash-register text-green-600 mr-2"></i>Nuevo Ingreso de Fondos</h3>
+                <form id="transaccionForm" onsubmit="guardarTransaccion(event)" class="grid grid-cols-1 md:grid-cols-5 gap-4 items-end">
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-600 mb-1">Fecha</label>
+                        <input type="date" id="tFecha" required class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600">
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-xs font-semibold text-gray-600 mb-1">Descripción / Fuente</label>
+                        <input type="text" id="tFuente" required placeholder="Ej: Aporte inicial / Venta" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-600 mb-1">Método de Pago</label>
+                        <select id="tMetodo" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600">
+                            <option value="Contado">Contado</option>
+                            <option value="Transferencia ASTROPAY">Transferencia ASTROPAY</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-600 mb-1">Monto (ARS)</label>
+                        <input type="number" step="any" id="tMonto" required placeholder="0.00" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600">
+                    </div>
+                    <div class="md:col-span-5 flex justify-end">
+                        <button type="submit" class="bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-2 rounded-lg shadow transition">
+                            <i class="fa-solid fa-plus mr-1"></i> Agregar Ingreso
+                        </button>
+                    </div>
+                </form>
+            </section>
+
+            <!-- SECCIÓN 3: LISTADO Y ESTADÍSTICAS DE INGRESOS -->
+            <section class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                <h3 class="text-lg font-bold text-gray-800 mb-4"><i class="fa-solid fa-list text-green-600 mr-2"></i>Historial de Ingresos</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-gray-50 border-b text-xs font-bold text-gray-600 uppercase">
+                                <th class="p-3">Fecha</th>
+                                <th class="p-3">Fuente / Descripción</th>
+                                <th class="p-3">Método</th>
+                                <th class="p-3 text-right">Monto (ARS)</th>
+                                <th class="p-3 text-center">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tablaTransacciones" class="divide-y text-sm text-gray-700">
+                            <!-- Los registros se cargan dinámicamente desde Firebase -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- SCRIPT DE FIREBASE Y LÓGICA DE LA APLICACIÓN -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBqmc7TXUqzwCSvFECOeSsL7yczUtoEkcE",
+            authDomain: "hoteles-brasil-2027.firebaseapp.com",
+            projectId: "hoteles-brasil-2027",
+            storageBucket: "hoteles-brasil-2027.firebasestorage.app",
+            messagingSenderId: "843950255626",
+            appId: "1:843950255626:web:3cff798fb2f89a141af9f3"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        let editandoId = null;
+
+        window.handleLogin = function(e) {
+            e.preventDefault();
+            const u = document.getElementById('userInput').value;
+            const p = document.getElementById('passInput').value;
+            if(u === 'DRPEREYRA' && p === '235689') {
+                document.getElementById('loginScreen').classList.add('hidden');
+                document.getElementById('mainApp').classList.remove('hidden');
+                window.cargarDatos();
+            } else {
+                document.getElementById('loginError').classList.remove('hidden');
+            }
+        };
+
+        window.cargarDatos = async function() {
+            try {
+                const metaDoc = await getDoc(doc(db, "configuracion", "metas"));
+                let m1 = 0, m2 = 0, m3 = 0;
+                let n1 = "Meta 1", n2 = "Meta 2", n3 = "Meta 3";
+                
+                if(metaDoc.exists()) {
+                    const data = metaDoc.data();
+                    m1 = Number(data.meta1) || 0;
+                    m2 = Number(data.meta2) || 0;
+                    m3 = Number(data.meta3) || 0;
+                    n1 = data.nombreMeta1 || "Meta 1";
+                    n2 = data.nombreMeta2 || "Meta 2";
+                    n3 = data.nombreMeta3 || "Meta 3";
+
+                    document.getElementById('meta1').value = m1;
+                    document.getElementById('meta2').value = m2;
+                    document.getElementById('meta3').value = m3;
+                    document.getElementById('nombreMeta1').value = n1;
+                    document.getElementById('nombreMeta2').value = n2;
+                    document.getElementById('nombreMeta3').value = n3;
+                }
+                const totalMetas = m1 + m2 + m3;
+                document.getElementById('totalMetasText').innerText = `$${totalMetas.toLocaleString()} ARS`;
+                document.getElementById('headerTotalMetasText').innerText = `$${totalMetas.toLocaleString()} ARS`;
+                
+                document.getElementById('nombresMetasResumen').innerText = `(${n1}, ${n2}, ${n3})`;
+
+                const querySnapshot = await getDocs(collection(db, "transacciones"));
+                let totalRecaudado = 0;
+                let html = "";
+                
+                querySnapshot.forEach((docSnap) => {
+                    const t = docSnap.data();
+                    totalRecaudado += Number(t.monto);
+                    html += `
+                        <tr class="hover:bg-gray-50">
+                            <td class="p-3">${t.fecha}</td>
+                            <td class="p-3 font-medium">${t.fuente}</td>
+                            <td class="p-3"><span class="px-2 py-1 bg-gray-100 rounded-full text-xs font-semibold">${t.metodo}</span></td>
+                            <td class="p-3 text-right font-bold text-green-600">$${Number(t.monto).toLocaleString()} ARS</td>
+                            <td class="p-3 text-center space-x-2">
+                                <button type="button" onclick="window.prepararEdicion('${docSnap.id}', '${t.fecha}', '${t.fuente}', '${t.metodo}', ${t.monto})" class="text-blue-500 hover:text-blue-700"><i class="fa-solid fa-pen-to-square"></i></button>
+                                <button type="button" onclick="window.eliminarTransaccion('${docSnap.id}')" class="text-red-500 hover:text-red-700"><i class="fa-solid fa-trash"></i></button>
+                            </td>
+                        </tr>
+                    `;
+                });
+
+                document.getElementById('tablaTransacciones').innerHTML = html || `<tr><td colspan="5" class="text-center p-4 text-gray-400">No hay ingresos registrados.</td></tr>`;
+                document.getElementById('totalRecaudadoText').innerText = `$${totalRecaudado.toLocaleString()} ARS`;
+                document.getElementById('headerRecaudadoText').innerText = `$${totalRecaudado.toLocaleString()}`;
+
+                // Barra 1 (Creciente)
+                let porcentaje = totalMetas > 0 ? Math.min(Math.round((totalRecaudado / totalMetas) * 100), 100) : 0;
+                const bar = document.getElementById('progressBar');
+                bar.style.width = `${porcentaje}%`;
+                bar.innerText = `${porcentaje}%`;
+
+                // Barra 2 (Decreciente - Saldo Restante)
+                let saldoRestante = Math.max(totalMetas - totalRecaudado, 0);
+                let porcentajeRestante = totalMetas > 0 ? Math.max(Math.round((saldoRestante / totalMetas) * 100), 0) : 0;
+                document.getElementById('saldoRestanteText').innerText = `$${saldoRestante.toLocaleString()} ARS`;
+                const barRestante = document.getElementById('progressRestanteBar');
+                barRestante.style.width = `${porcentajeRestante}%`;
+
+            } catch (error) {
+                console.error("Error al cargar datos:", error);
+            }
+        };
+
+        window.guardarMetas = async function() {
+            const nombreMeta1 = document.getElementById('nombreMeta1').value;
+            const nombreMeta2 = document.getElementById('nombreMeta2').value;
+            const nombreMeta3 = document.getElementById('nombreMeta3').value;
+            const meta1 = Number(document.getElementById('meta1').value) || 0;
+            const meta2 = Number(document.getElementById('meta2').value) || 0;
+            const meta3 = Number(document.getElementById('meta3').value) || 0;
+
+            try {
+                await setDoc(doc(db, "configuracion", "metas"), { 
+                    nombreMeta1, nombreMeta2, nombreMeta3, 
+                    meta1, meta2, meta3 
+                });
+                alert("Metas y nombres actualizados correctamente.");
+                window.cargarDatos();
+            } catch (error) {
+                alert("Error al actualizar metas.");
+            }
+        };
+
+        window.guard
