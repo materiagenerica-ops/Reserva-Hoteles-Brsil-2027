@@ -39,19 +39,41 @@
     <!-- ================= FORMULARIO PRINCIPAL (DASHBOARD) ================= -->
     <div id="mainApp" class="hidden flex flex-col min-h-screen">
         
-        <!-- BARRA SUPERIOR DE PROGRESO GLOBAL -->
+        <!-- BARRA SUPERIOR DE ESTADO Y PROGRESO -->
         <header class="bg-white shadow-sm border-b sticky top-0 z-50">
-            <div class="max-w-7xl mx-auto px-4 py-3 flex flex-col md:flex-row items-center justify-between gap-4">
-                <div class="flex items-center gap-4">
-                    <img src="reserva_hoteles.jpg" alt="Logo" class="w-14 h-14 rounded-lg object-cover border shadow-sm" onerror="this.src='https://via.placeholder.com/150?text=Logo'">
-                    <div>
-                        <h2 class="text-lg font-bold text-gray-800 leading-tight">RECAUDACIÓN DE PRESUPUESTO HOTELES 2026/2027</h2>
-                        <p class="text-xs text-gray-500">Torres Rio Grande do Sul - Brasil</p>
+            <div class="max-w-7xl mx-auto px-4 py-3 flex flex-col gap-2">
+                <!-- Fila Superior: Logo y Título -->
+                <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+                    <div class="flex items-center gap-4">
+                        <img src="reserva_hoteles.jpg" alt="Logo" class="w-14 h-14 rounded-lg object-cover border shadow-sm" onerror="this.src='https://via.placeholder.com/150?text=Logo'">
+                        <div>
+                            <h2 class="text-lg font-bold text-gray-800 leading-tight">RECAUDACIÓN DE PRESUPUESTO HOTELES 2026/2027</h2>
+                            <p class="text-xs text-gray-500">Torres Rio Grande do Sul - Brasil</p>
+                        </div>
+                    </div>
+                    <!-- Datos Recaudados / Meta Global -->
+                    <div class="text-right flex items-center gap-4 text-sm">
+                        <div>
+                            <span class="text-gray-500 text-xs block">Recaudado / Metas</span>
+                            <strong id="headerRecaudadoText" class="text-green-600">$0</strong> / <strong id="headerTotalMetasText" class="text-gray-800">$0</strong>
+                        </div>
                     </div>
                 </div>
-                <!-- Barra de Progreso Superior -->
-                <div class="w-full md:w-1/3 bg-gray-200 rounded-full h-4 overflow-hidden shadow-inner relative">
+
+                <!-- Barra 1: Progreso de Recaudación (Creciente) -->
+                <div class="w-full bg-gray-200 rounded-full h-4 overflow-hidden shadow-inner relative">
                     <div id="progressBar" class="bg-green-600 h-full transition-all duration-500 text-right text-xs text-white font-bold pr-2 flex items-center justify-end" style="width: 0%">0%</div>
+                </div>
+
+                <!-- Barra 2: Saldo Pendiente de Metas (Decreciente con Desglose) -->
+                <div class="pt-2 border-t border-gray-100 flex flex-col gap-1">
+                    <div class="flex justify-between items-center text-xs font-semibold text-gray-700">
+                        <span><i class="fa-solid fa-chart-pie text-orange-500 mr-1"></i> Saldo Pendiente de las Metas: <span id="nombresMetasResumen" class="text-gray-500 font-normal"></span></span>
+                        <span id="saldoRestanteText" class="text-orange-600 font-bold">$0 ARS</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-3 overflow-hidden shadow-inner relative">
+                        <div id="progressRestanteBar" class="bg-orange-500 h-full transition-all duration-500" style="width: 100%"></div>
+                    </div>
                 </div>
             </div>
         </header>
@@ -70,139 +92,11 @@
                     <!-- Meta 1 -->
                     <div class="p-4 border rounded-lg bg-gray-50 space-y-2">
                         <label class="block text-xs font-semibold text-gray-600">Nombre Meta 1</label>
-                        <input type="text" id="nombreMeta1" class="w-full px-3 py-1.5 border rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-green-600" placeholder="Nombre de la meta">
+                        <input type="text" id="nombreMeta1" class="w-full px-3 py-1.5 border rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-green-600" placeholder="Ej: Hotel Principal">
                         <label class="block text-xs font-semibold text-gray-600">Valor (ARS)</label>
                         <input type="number" id="meta1" class="w-full px-3 py-1.5 border rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-green-600" placeholder="0">
                     </div>
                     <!-- Meta 2 -->
                     <div class="p-4 border rounded-lg bg-gray-50 space-y-2">
                         <label class="block text-xs font-semibold text-gray-600">Nombre Meta 2</label>
-                        <input type="text" id="nombreMeta2" class="w-full px-3 py-1.5 border rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-green-600" placeholder="Nombre de la meta">
-                        <label class="block text-xs font-semibold text-gray-600">Valor (ARS)</label>
-                        <input type="number" id="meta2" class="w-full px-3 py-1.5 border rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-green-600" placeholder="0">
-                    </div>
-                    <!-- Meta 3 -->
-                    <div class="p-4 border rounded-lg bg-gray-50 space-y-2">
-                        <label class="block text-xs font-semibold text-gray-600">Nombre Meta 3</label>
-                        <input type="text" id="nombreMeta3" class="w-full px-3 py-1.5 border rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-green-600" placeholder="Nombre de la meta">
-                        <label class="block text-xs font-semibold text-gray-600">Valor (ARS)</label>
-                        <input type="number" id="meta3" class="w-full px-3 py-1.5 border rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-green-600" placeholder="0">
-                    </div>
-                </div>
-                <div class="mt-4 pt-4 border-t flex justify-between text-sm text-gray-600">
-                    <span>Suma Total Metas: <strong id="totalMetasText" class="text-gray-900">$0 ARS</strong></span>
-                    <span>Total Recaudado: <strong id="totalRecaudadoText" class="text-green-600">$0 ARS</strong></span>
-                </div>
-            </section>
-
-            <!-- SECCIÓN 2: REGISTRO DE INGRESOS -->
-            <section class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-                <h3 class="text-lg font-bold text-gray-800 mb-4"><i class="fa-solid fa-cash-register text-green-600 mr-2"></i>Nuevo Ingreso de Fondos</h3>
-                <form id="transaccionForm" onsubmit="guardarTransaccion(event)" class="grid grid-cols-1 md:grid-cols-5 gap-4 items-end">
-                    <div>
-                        <label class="block text-xs font-semibold text-gray-600 mb-1">Fecha</label>
-                        <input type="date" id="tFecha" required class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600">
-                    </div>
-                    <div class="md:col-span-2">
-                        <label class="block text-xs font-semibold text-gray-600 mb-1">Descripción / Fuente</label>
-                        <input type="text" id="tFuente" required placeholder="Ej: Aporte inicial / Venta" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-gray-600 mb-1">Método de Pago</label>
-                        <select id="tMetodo" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600">
-                            <option value="Contado">Contado</option>
-                            <option value="Transferencia ASTROPAY">Transferencia ASTROPAY</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-gray-600 mb-1">Monto (ARS)</label>
-                        <input type="number" step="any" id="tMonto" required placeholder="0.00" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600">
-                    </div>
-                    <div class="md:col-span-5 flex justify-end">
-                        <button type="submit" class="bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-2 rounded-lg shadow transition">
-                            <i class="fa-solid fa-plus mr-1"></i> Agregar Ingreso
-                        </button>
-                    </div>
-                </form>
-            </section>
-
-            <!-- SECCIÓN 3: LISTADO Y ESTADÍSTICAS DE INGRESOS -->
-            <section class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-                <h3 class="text-lg font-bold text-gray-800 mb-4"><i class="fa-solid fa-list text-green-600 mr-2"></i>Historial de Ingresos</h3>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left border-collapse">
-                        <thead>
-                            <tr class="bg-gray-50 border-b text-xs font-bold text-gray-600 uppercase">
-                                <th class="p-3">Fecha</th>
-                                <th class="p-3">Fuente / Descripción</th>
-                                <th class="p-3">Método</th>
-                                <th class="p-3 text-right">Monto (ARS)</th>
-                                <th class="p-3 text-center">Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tablaTransacciones" class="divide-y text-sm text-gray-700">
-                            <!-- Los registros se cargan dinámicamente desde Firebase -->
-                        </tbody>
-                    </table>
-                </div>
-            </section>
-
-        </main>
-    </div>
-
-    <!-- SCRIPT DE FIREBASE Y LÓGICA DE LA APLICACIÓN -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyBqmc7TXUqzwCSvFECOeSsL7yczUtoEkcE",
-            authDomain: "hoteles-brasil-2027.firebaseapp.com",
-            projectId: "hoteles-brasil-2027",
-            storageBucket: "hoteles-brasil-2027.firebasestorage.app",
-            messagingSenderId: "843950255626",
-            appId: "1:843950255626:web:3cff798fb2f89a141af9f3"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-
-        let editandoId = null;
-
-        window.handleLogin = function(e) {
-            e.preventDefault();
-            const u = document.getElementById('userInput').value;
-            const p = document.getElementById('passInput').value;
-            if(u === 'DRPEREYRA' && p === '235689') {
-                document.getElementById('loginScreen').classList.add('hidden');
-                document.getElementById('mainApp').classList.remove('hidden');
-                window.cargarDatos();
-            } else {
-                document.getElementById('loginError').classList.remove('hidden');
-            }
-        };
-
-        window.cargarDatos = async function() {
-            try {
-                const metaDoc = await getDoc(doc(db, "configuracion", "metas"));
-                let m1 = 0, m2 = 0, m3 = 0;
-                let n1 = "", n2 = "", n3 = "";
-                
-                if(metaDoc.exists()) {
-                    const data = metaDoc.data();
-                    m1 = data.meta1 || 0;
-                    m2 = data.meta2 || 0;
-                    m3 = data.meta3 || 0;
-                    n1 = data.nombreMeta1 || "";
-                    n2 = data.nombreMeta2 || "";
-                    n3 = data.nombreMeta3 || "";
-
-                    document.getElementById('meta1').value = m1;
-                    document.getElementById('meta2').value = m2;
-                    document.getElementById('meta3').value = m3;
-                    document.getElementById('nombreMeta1').value = n1;
-                    document.getElementById('nombreMeta2').value = n2;
-                    document.getElementById('nombreMeta3').value = n3;
-                }
-                const totalMetas = Number(m1) + Number(m2) + Number(m3);
-                document.getElementById('totalMetasText').innerText =
+                        <input type="text" id="nombreMeta2"
