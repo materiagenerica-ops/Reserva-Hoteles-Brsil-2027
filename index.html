@@ -4,166 +4,195 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Control Presupuesto Hoteles Brasil 2027</title>
-    <!-- Tailwind CSS de Producción -->
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <!-- FontAwesome para iconos -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { font-family: sans-serif; background-color: #f1f5f9; margin: 0; padding: 0; color: #1e293b; }
+        .hidden { display: none !important; }
+        .flex { display: flex; }
+        .items-center { align-items: center; }
+        .justify-center { justify-content: center; }
+        .justify-between { justify-content: space-between; }
+        .flex-col { flex-direction: column; }
+        .min-h-screen { min-height: 100vh; }
+        .w-full { width: 100%; }
+        .max-w-md { max-width: 28rem; }
+        .max-w-7xl { max-width: 80rem; margin: 0 auto; }
+        .bg-white { background-color: #ffffff; }
+        .p-8 { padding: 2rem; }
+        .p-6 { padding: 1.5rem; }
+        .px-4 { padding-left: 1rem; padding-right: 1rem; }
+        .py-3 { padding-top: 0.75rem; padding-bottom: 0.75rem; }
+        .py-6 { padding-top: 1.5rem; padding-bottom: 1.5rem; }
+        .rounded-xl { border-radius: 0.75rem; }
+        .rounded-lg { border-radius: 0.5rem; }
+        .shadow-lg { box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
+        .shadow-sm { box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05); }
+        .border { border: 1px solid #e2e8f0; }
+        .text-center { text-align: center; }
+        .text-right { text-align: right; }
+        .font-bold { font-weight: 700; }
+        .text-2xl { font-size: 1.5rem; }
+        .text-lg { font-size: 1.125rem; }
+        .text-sm { font-size: 0.875rem; }
+        .text-xs { font-size: 0.75rem; }
+        .text-green { color: #16a34a; }
+        .text-red { color: #dc2626; }
+        .text-gray { color: #64748b; }
+        .space-y-4 > * + * { margin-top: 1rem; }
+        .space-y-6 > * + * { margin-top: 1.5rem; }
+        .gap-4 { gap: 1rem; }
+        .grid { display: grid; }
+        .grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+        @media (min-width: 768px) {
+            .md\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+            .md\:grid-cols-5 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+            .md\:col-span-2 { grid-column: span 2 / span 2; }
+            .md\:col-span-5 { grid-column: span 5 / span 5; }
+            .md\:flex-row { flex-direction: row; }
+        }
+        input, select { width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #cbd5e1; border-radius: 0.5rem; box-sizing: border-box; }
+        button { cursor: pointer; border: none; padding: 0.5rem 1rem; border-radius: 0.5rem; font-weight: 600; }
+        .btn-green { background-color: #16a34a; color: white; width: 100%; padding: 0.75rem; }
+        .btn-green:hover { background-color: #15803d; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 0.75rem; border-bottom: 1px solid #e2e8f0; }
+        th { background-color: #f8fafc; font-size: 0.75rem; text-transform: uppercase; color: #475569; }
+    </style>
 </head>
-<body class="bg-gray-100 min-h-screen font-sans">
+<body>
 
     <!-- ================= PANTALLA DE LOGIN ================= -->
     <div id="loginScreen" class="flex items-center justify-center min-h-screen px-4">
-        <div class="bg-white p-8 rounded-xl shadow-lg w-full max-w-md border border-gray-200">
-            <div class="text-center mb-6">
-                <img src="reserva_hoteles.jpg" alt="Logo Hoteles Brasil" class="w-24 h-24 mx-auto rounded-full object-cover shadow-md mb-4 border-2 border-green-600" onerror="this.src='https://via.placeholder.com/150?text=Logo'">
-                <h1 class="text-2xl font-bold text-gray-800">Control Presupuesto</h1>
-                <p class="text-sm text-gray-500">Hoteles Brasil 2027</p>
+        <div class="bg-white p-8 rounded-xl shadow-lg w-full max-w-md border">
+            <div class="text-center" style="margin-bottom: 1.5rem;">
+                <img src="reserva_hoteles.jpg" alt="Logo Hoteles Brasil" style="width: 6rem; height: 6rem; margin: 0 auto 1rem auto; border-radius: 50%; object-fit: cover; border: 2px solid #16a34a;" onerror="this.src='https://via.placeholder.com/150?text=Logo'">
+                <h1 class="text-2xl font-bold" style="color: #1e293b;">Control Presupuesto</h1>
+                <p class="text-sm text-gray">Hoteles Brasil 2027</p>
             </div>
             <form id="loginForm" class="space-y-4">
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Usuario</label>
-                    <input type="text" id="userInput" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600" placeholder="Usuario">
+                    <label class="text-sm font-bold text-gray" style="display: block; margin-bottom: 0.25rem;">Usuario</label>
+                    <input type="text" id="userInput" required placeholder="Usuario">
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Contraseña</label>
-                    <input type="password" id="passInput" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600" placeholder="••••••••">
+                    <label class="text-sm font-bold text-gray" style="display: block; margin-bottom: 0.25rem;">Contraseña</label>
+                    <input type="password" id="passInput" required placeholder="••••••••">
                 </div>
-                <div id="loginError" class="text-red-500 text-sm text-center hidden">Usuario o contraseña incorrectos.</div>
-                <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2.5 rounded-lg transition duration-200 shadow-md">
-                    Ingresar
-                </button>
+                <div id="loginError" class="text-red text-sm text-center hidden">Usuario o contraseña incorrectos.</div>
+                <button type="submit" class="btn-green">Ingresar</button>
             </form>
         </div>
     </div>
 
     <!-- ================= FORMULARIO PRINCIPAL (DASHBOARD) ================= -->
-    <div id="mainApp" class="hidden flex flex-col min-h-screen">
+    <div id="mainApp" class="hidden flex-col min-h-screen">
         
         <!-- BARRA SUPERIOR DE ESTADO Y PROGRESO -->
-        <header class="bg-white shadow-sm border-b sticky top-0 z-50">
-            <div class="max-w-7xl mx-auto px-4 py-3 flex flex-col gap-3">
-                <!-- Fila Superior: Logo y Título -->
+        <header class="bg-white shadow-sm border" style="position: sticky; top: 0; z-index: 50;">
+            <div class="max-w-7xl px-4 py-3 flex flex-col gap-3">
                 <div class="flex flex-col md:flex-row items-center justify-between gap-4">
                     <div class="flex items-center gap-4">
-                        <img src="reserva_hoteles.jpg" alt="Logo" class="w-14 h-14 rounded-lg object-cover border shadow-sm" onerror="this.src='https://via.placeholder.com/150?text=Logo'">
+                        <img src="reserva_hoteles.jpg" alt="Logo" style="width: 3.5rem; height: 3.5rem; border-radius: 0.5rem; object-fit: cover; border: 1px solid #cbd5e1;" onerror="this.src='https://via.placeholder.com/150?text=Logo'">
                         <div>
-                            <h2 class="text-lg font-bold text-gray-800 leading-tight">RECAUDACIÓN DE PRESUPUESTO HOTELES 2026/2027</h2>
-                            <p class="text-xs text-gray-500">Torres Rio Grande do Sul - Brasil</p>
+                            <h2 class="text-lg font-bold" style="color: #1e293b; line-height: 1.2;">RECAUDACIÓN DE PRESUPUESTO HOTELES 2026/2027</h2>
+                            <p class="text-xs text-gray">Torres Rio Grande do Sul - Brasil</p>
                         </div>
                     </div>
-                    <!-- Datos Recaudados / Meta Global -->
-                    <div class="text-right flex items-center gap-4 text-sm">
-                        <div>
-                            <span class="text-gray-500 text-xs block">Recaudado / Metas</span>
-                            <strong id="headerRecaudadoText" class="text-green-600">$0</strong> / <strong id="headerTotalMetasText" class="text-gray-800">$0</strong>
-                        </div>
+                    <div class="text-right text-sm">
+                        <span class="text-gray text-xs" style="display: block;">Recaudado / Metas</span>
+                        <strong id="headerRecaudadoText" class="text-green">$0</strong> / <strong id="headerTotalMetasText" style="color: #1e293b;">$0</strong>
                     </div>
                 </div>
 
-                <!-- Barra 1: Progreso de Recaudación (Creciente) -->
-                <div class="w-full bg-gray-200 rounded-full h-4 overflow-hidden shadow-inner relative flex">
-                    <div id="progressBar" class="bg-green-600 h-full transition-all duration-300 text-right text-xs text-white font-bold pr-2 flex items-center justify-end" style="width: 0%">0%</div>
-                </div>
-
-                <!-- Barra 2: Saldo Pendiente de Metas (Decreciente: Comienza llena al 100% y se reduce descontando ancho) -->
-                <div class="pt-2 border-t border-gray-100 flex flex-col gap-1">
-                    <div class="flex justify-between items-center text-xs font-semibold text-gray-700">
-                        <span><i class="fa-solid fa-chart-pie text-orange-500 mr-1"></i> Saldo Pendiente de las Metas: <span id="nombresMetasResumen" class="text-gray-500 font-normal"></span></span>
-                        <span id="saldoRestanteText" class="text-orange-600 font-bold">$0 ARS</span>
-                    </div>
-                    <div class="w-full bg-gray-200 rounded-full h-3 overflow-hidden shadow-inner relative flex justify-start">
-                        <div id="progressRestanteBar" class="bg-orange-500 h-full transition-all duration-300" style="width: 100%;"></div>
-                    </div>
+                <!-- Única Barra de Progreso (Creciente) -->
+                <div style="width: 100%; background-color: #e2e8f0; border-radius: 9999px; height: 1rem; overflow: hidden; position: relative;">
+                    <div id="progressBar" style="background-color: #16a34a; height: 100%; width: 0%; transition: width 0.3s; text-align: right; font-size: 0.75rem; color: white; font-weight: bold; padding-right: 0.5rem; display: flex; align-items: center; justify-content: flex-end;">0%</div>
                 </div>
             </div>
         </header>
 
-        <main class="max-w-7xl mx-auto px-4 py-6 flex-1 w-full space-y-6">
+        <main class="max-w-7xl px-4 py-6 w-full space-y-6">
             
             <!-- SECCIÓN 1: METAS DE RECAUDACIÓN -->
-            <section class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-                <div class="flex justify-between items-center mb-4">
-                    <h3 class="text-lg font-bold text-gray-800"><i class="fa-solid fa-bullseye text-green-600 mr-2"></i>Metas de Recaudación (Pesos Argentinos)</h3>
-                    <button id="btnGuardarMetas" type="button" class="bg-gray-800 hover:bg-gray-900 text-white text-sm font-semibold px-4 py-2 rounded-lg shadow transition">
-                        <i class="fa-solid fa-save mr-1"></i> Actualizar Metas
+            <section class="bg-white p-6 rounded-xl shadow-sm border">
+                <div class="flex justify-between items-center" style="margin-bottom: 1rem;">
+                    <h3 class="text-lg font-bold" style="color: #1e293b;"><i class="fa-solid fa-bullseye text-green" style="margin-right: 0.5rem;"></i>Metas de Recaudación (Pesos Argentinos)</h3>
+                    <button id="btnGuardarMetas" type="button" style="background-color: #1e293b; color: white; font-size: 0.875rem; padding: 0.5rem 1rem;">
+                        <i class="fa-solid fa-save" style="margin-right: 0.25rem;"></i> Actualizar Metas
                     </button>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <!-- Meta 1 -->
-                    <div class="p-4 border rounded-lg bg-gray-50 space-y-2">
-                        <label class="block text-xs font-semibold text-gray-600">Nombre Meta 1</label>
-                        <input type="text" id="nombreMeta1" class="w-full px-3 py-1.5 border rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-green-600" placeholder="Ej: Hotel Principal">
-                        <label class="block text-xs font-semibold text-gray-600">Valor (ARS)</label>
-                        <input type="number" id="meta1" class="w-full px-3 py-1.5 border rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-green-600" placeholder="0">
+                    <div style="padding: 1rem; border: 1px solid #e2e8f0; border-radius: 0.5rem; background-color: #f8fafc;" class="space-y-4">
+                        <label class="text-xs font-bold text-gray" style="display: block;">Nombre Meta 1</label>
+                        <input type="text" id="nombreMeta1" placeholder="Ej: Hotel Principal">
+                        <label class="text-xs font-bold text-gray" style="display: block;">Valor (ARS)</label>
+                        <input type="number" id="meta1" placeholder="0">
                     </div>
-                    <!-- Meta 2 -->
-                    <div class="p-4 border rounded-lg bg-gray-50 space-y-2">
-                        <label class="block text-xs font-semibold text-gray-600">Nombre Meta 2</label>
-                        <input type="text" id="nombreMeta2" class="w-full px-3 py-1.5 border rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-green-600" placeholder="Ej: Hotel Secundario">
-                        <label class="block text-xs font-semibold text-gray-600">Valor (ARS)</label>
-                        <input type="number" id="meta2" class="w-full px-3 py-1.5 border rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-green-600" placeholder="0">
+                    <div style="padding: 1rem; border: 1px solid #e2e8f0; border-radius: 0.5rem; background-color: #f8fafc;" class="space-y-4">
+                        <label class="text-xs font-bold text-gray" style="display: block;">Nombre Meta 2</label>
+                        <input type="text" id="nombreMeta2" placeholder="Ej: Hotel Secundario">
+                        <label class="text-xs font-bold text-gray" style="display: block;">Valor (ARS)</label>
+                        <input type="number" id="meta2" placeholder="0">
                     </div>
-                    <!-- Meta 3 -->
-                    <div class="p-4 border rounded-lg bg-gray-50 space-y-2">
-                        <label class="block text-xs font-semibold text-gray-600">Nombre Meta 3</label>
-                        <input type="text" id="nombreMeta3" class="w-full px-3 py-1.5 border rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-green-600" placeholder="Ej: Contingencia">
-                        <label class="block text-xs font-semibold text-gray-600">Valor (ARS)</label>
-                        <input type="number" id="meta3" class="w-full px-3 py-1.5 border rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-green-600" placeholder="0">
+                    <div style="padding: 1rem; border: 1px solid #e2e8f0; border-radius: 0.5rem; background-color: #f8fafc;" class="space-y-4">
+                        <label class="text-xs font-bold text-gray" style="display: block;">Nombre Meta 3</label>
+                        <input type="text" id="nombreMeta3" placeholder="Ej: Contingencia">
+                        <label class="text-xs font-bold text-gray" style="display: block;">Valor (ARS)</label>
+                        <input type="number" id="meta3" placeholder="0">
                     </div>
                 </div>
-                <div class="mt-4 pt-4 border-t flex justify-between text-sm text-gray-600">
-                    <span>Suma Total Metas: <strong id="totalMetasText" class="text-gray-900">$0 ARS</strong></span>
-                    <span>Total Recaudado: <strong id="totalRecaudadoText" class="text-green-600">$0 ARS</strong></span>
+                <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #e2e8f0;" class="flex justify-between text-sm text-gray">
+                    <span>Suma Total Metas: <strong id="totalMetasText" style="color: #1e293b;">$0 ARS</strong></span>
+                    <span>Total Recaudado: <strong id="totalRecaudadoText" class="text-green">$0 ARS</strong></span>
                 </div>
             </section>
 
             <!-- SECCIÓN 2: REGISTRO DE INGRESOS -->
-            <section class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-                <h3 class="text-lg font-bold text-gray-800 mb-4"><i class="fa-solid fa-cash-register text-green-600 mr-2"></i>Nuevo Ingreso de Fondos</h3>
-                <form id="transaccionForm" class="grid grid-cols-1 md:grid-cols-5 gap-4 items-end">
+            <section class="bg-white p-6 rounded-xl shadow-sm border">
+                <h3 class="text-lg font-bold" style="color: #1e293b; margin-bottom: 1rem;"><i class="fa-solid fa-cash-register text-green" style="margin-right: 0.5rem;"></i>Nuevo Ingreso de Fondos</h3>
+                <form id="transaccionForm" class="grid grid-cols-1 md:grid-cols-5 gap-4" style="align-items: flex-end;">
                     <div>
-                        <label class="block text-xs font-semibold text-gray-600 mb-1">Fecha</label>
-                        <input type="date" id="tFecha" required class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600">
+                        <label class="text-xs font-bold text-gray" style="display: block; margin-bottom: 0.25rem;">Fecha</label>
+                        <input type="date" id="tFecha" required>
                     </div>
                     <div class="md:col-span-2">
-                        <label class="block text-xs font-semibold text-gray-600 mb-1">Descripción / Fuente</label>
-                        <input type="text" id="tFuente" required placeholder="Ej: Aporte inicial / Venta" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600">
+                        <label class="text-xs font-bold text-gray" style="display: block; margin-bottom: 0.25rem;">Descripción / Fuente</label>
+                        <input type="text" id="tFuente" required placeholder="Ej: Aporte inicial / Venta">
                     </div>
                     <div>
-                        <label class="block text-xs font-semibold text-gray-600 mb-1">Método de Pago</label>
-                        <select id="tMetodo" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600">
+                        <label class="text-xs font-bold text-gray" style="display: block; margin-bottom: 0.25rem;">Método de Pago</label>
+                        <select id="tMetodo">
                             <option value="Contado">Contado</option>
                             <option value="Transferencia ASTROPAY">Transferencia ASTROPAY</option>
                         </select>
                     </div>
                     <div>
-                        <label class="block text-xs font-semibold text-gray-600 mb-1">Monto (ARS)</label>
-                        <input type="number" step="any" id="tMonto" required placeholder="0.00" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600">
+                        <label class="text-xs font-bold text-gray" style="display: block; margin-bottom: 0.25rem;">Monto (ARS)</label>
+                        <input type="number" step="any" id="tMonto" required placeholder="0.00">
                     </div>
-                    <div class="md:col-span-5 flex justify-end">
-                        <button type="submit" class="bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-2 rounded-lg shadow transition">
-                            <i class="fa-solid fa-plus mr-1"></i> Agregar Ingreso
-                        </button>
+                    <div class="md:col-span-5" style="display: flex; justify-content: flex-end;">
+                        <button type="submit" class="btn-green" style="width: auto; padding: 0.5rem 1.5rem;"><i class="fa-solid fa-plus" style="margin-right: 0.25rem;"></i> Agregar Ingreso</button>
                     </div>
                 </form>
             </section>
 
             <!-- SECCIÓN 3: LISTADO Y ESTADÍSTICAS DE INGRESOS -->
-            <section class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-                <h3 class="text-lg font-bold text-gray-800 mb-4"><i class="fa-solid fa-list text-green-600 mr-2"></i>Historial de Ingresos</h3>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left border-collapse">
+            <section class="bg-white p-6 rounded-xl shadow-sm border">
+                <h3 class="text-lg font-bold" style="color: #1e293b; margin-bottom: 1rem;"><i class="fa-solid fa-list text-green" style="margin-right: 0.5rem;"></i>Historial de Ingresos</h3>
+                <div style="overflow-x: auto;">
+                    <table>
                         <thead>
-                            <tr class="bg-gray-50 border-b text-xs font-bold text-gray-600 uppercase">
-                                <th class="p-3">Fecha</th>
-                                <th class="p-3">Fuente / Descripción</th>
-                                <th class="p-3">Método</th>
-                                <th class="p-3 text-right">Monto (ARS)</th>
-                                <th class="p-3 text-center">Acciones</th>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Fuente / Descripción</th>
+                                <th>Método</th>
+                                <th class="text-right">Monto (ARS)</th>
+                                <th class="text-center">Acciones</th>
                             </tr>
                         </thead>
-                        <tbody id="tablaTransacciones" class="divide-y text-sm text-gray-700">
-                            <!-- Los registros se cargan dinámicamente desde Firebase -->
+                        <tbody id="tablaTransacciones" style="font-size: 0.875rem; color: #334155;">
+                            <!-- Dinámico -->
                         </tbody>
                     </table>
                 </div>
@@ -205,36 +234,23 @@
             }
         });
 
-        window.actualizarBarrasEnVivo = function() {
+        window.actualizarBarraEnVivo = function() {
             const m1 = Number(document.getElementById('meta1').value) || 0;
             const m2 = Number(document.getElementById('meta2').value) || 0;
             const m3 = Number(document.getElementById('meta3').value) || 0;
-            const n1 = document.getElementById('nombreMeta1').value || "Meta 1";
-            const n2 = document.getElementById('nombreMeta2').value || "Meta 2";
-            const n3 = document.getElementById('nombreMeta3').value || "Meta 3";
 
             const totalMetas = m1 + m2 + m3;
             document.getElementById('totalMetasText').innerText = `$${totalMetas.toLocaleString()} ARS`;
             document.getElementById('headerTotalMetasText').innerText = `$${totalMetas.toLocaleString()} ARS`;
-            document.getElementById('nombresMetasResumen').innerText = `(${n1}, ${n2}, ${n3})`;
 
-            // Barra 1: Creciente
             let porcentajeCreciente = totalMetas > 0 ? Math.min(Math.round((totalRecaudadoGlobal / totalMetas) * 100), 100) : 0;
             const barCreciente = document.getElementById('progressBar');
             barCreciente.style.width = porcentajeCreciente + '%';
             barCreciente.innerText = porcentajeCreciente + '%';
-
-            // Barra 2: Saldo Pendiente (Decreciente exacto en vivo)
-            let saldoRestante = Math.max(totalMetas - totalRecaudadoGlobal, 0);
-            let porcentajeRestante = totalMetas > 0 ? Math.max(Math.min(Math.round((saldoRestante / totalMetas) * 100), 100), 0) : (totalRecaudadoGlobal > 0 ? 0 : 100);
-            
-            document.getElementById('saldoRestanteText').innerText = `$${saldoRestante.toLocaleString()} ARS`;
-            const barRestante = document.getElementById('progressRestanteBar');
-            barRestante.style.width = porcentajeRestante + '%';
         };
 
-        ['meta1', 'meta2', 'meta3', 'nombreMeta1', 'nombreMeta2', 'nombreMeta3'].forEach(id => {
-            document.getElementById(id).addEventListener('input', window.actualizarBarrasEnVivo);
+        ['meta1', 'meta2', 'meta3'].forEach(id => {
+            document.getElementById(id).addEventListener('input', window.actualizarBarraEnVivo);
         });
 
         async function cargarDatos() {
@@ -258,24 +274,24 @@
                     const t = docSnap.data();
                     totalRecaudadoGlobal += Number(t.monto);
                     html += `
-                        <tr class="hover:bg-gray-50">
-                            <td class="p-3">${t.fecha}</td>
-                            <td class="p-3 font-medium">${t.fuente}</td>
-                            <td class="p-3"><span class="px-2 py-1 bg-gray-100 rounded-full text-xs font-semibold">${t.metodo}</span></td>
-                            <td class="p-3 text-right font-bold text-green-600">$${Number(t.monto).toLocaleString()} ARS</td>
-                            <td class="p-3 text-center space-x-2">
-                                <button type="button" data-id="${docSnap.id}" data-fecha="${t.fecha}" data-fuente="${t.fuente}" data-metodo="${t.metodo}" data-monto="${t.monto}" class="btn-editar text-blue-500 hover:text-blue-700"><i class="fa-solid fa-pen-to-square"></i></button>
-                                <button type="button" data-id="${docSnap.id}" class="btn-eliminar text-red-500 hover:text-red-700"><i class="fa-solid fa-trash"></i></button>
+                        <tr>
+                            <td>${t.fecha}</td>
+                            <td style="font-weight: 500;">${t.fuente}</td>
+                            <td><span style="padding: 0.25rem 0.5rem; background-color: #f1f5f9; border-radius: 9999px; font-size: 0.75rem; font-weight: 600;">${t.metodo}</span></td>
+                            <td class="text-right font-bold text-green">$${Number(t.monto).toLocaleString()} ARS</td>
+                            <td class="text-center" style="word-spacing: 0.5rem;">
+                                <button type="button" data-id="${docSnap.id}" data-fecha="${t.fecha}" data-fuente="${t.fuente}" data-metodo="${t.metodo}" data-monto="${t.monto}" class="btn-editar" style="background: none; color: #3b82f6; padding: 0;"><i class="fa-solid fa-pen-to-square"></i></button>
+                                <button type="button" data-id="${docSnap.id}" class="btn-eliminar" style="background: none; color: #ef4444; padding: 0;"><i class="fa-solid fa-trash"></i></button>
                             </td>
                         </tr>
                     `;
                 });
 
-                document.getElementById('tablaTransacciones').innerHTML = html || `<tr><td colspan="5" class="text-center p-4 text-gray-400">No hay ingresos registrados.</td></tr>`;
+                document.getElementById('tablaTransacciones').innerHTML = html || `<tr><td colspan="5" class="text-center" style="padding: 1rem; color: #94a3b8;">No hay ingresos registrados.</td></tr>`;
                 document.getElementById('totalRecaudadoText').innerText = `$${totalRecaudadoGlobal.toLocaleString()} ARS`;
                 document.getElementById('headerRecaudadoText').innerText = `$${totalRecaudadoGlobal.toLocaleString()}`;
 
-                window.actualizarBarrasEnVivo();
+                window.actualizarBarraEnVivo();
 
                 document.querySelectorAll('.btn-editar').forEach(btn => {
                     btn.addEventListener('click', () => {
