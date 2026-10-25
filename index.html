@@ -60,19 +60,19 @@
                     </div>
                 </div>
 
-                <!-- Barra 1: Progreso de Recaudación (Creciente de izquierda a derecha) -->
+                <!-- Barra 1: Progreso de Recaudación (Creciente) -->
                 <div class="w-full bg-gray-200 rounded-full h-4 overflow-hidden shadow-inner relative flex">
-                    <div id="progressBar" class="bg-green-600 h-full transition-all duration-500 text-right text-xs text-white font-bold pr-2 flex items-center justify-end" style="width: 0%">0%</div>
+                    <div id="progressBar" class="bg-green-600 h-full transition-all duration-300 text-right text-xs text-white font-bold pr-2 flex items-center justify-end" style="width: 0%">0%</div>
                 </div>
 
-                <!-- Barra 2: Saldo Pendiente de Metas (Decreciente: Comienza llena al 100% y se reduce descontando el ancho proporcional) -->
+                <!-- Barra 2: Saldo Pendiente de Metas (Decreciente: Comienza llena al 100% y descuenta ancho) -->
                 <div class="pt-2 border-t border-gray-100 flex flex-col gap-1">
                     <div class="flex justify-between items-center text-xs font-semibold text-gray-700">
                         <span><i class="fa-solid fa-chart-pie text-orange-500 mr-1"></i> Saldo Pendiente de las Metas: <span id="nombresMetasResumen" class="text-gray-500 font-normal"></span></span>
                         <span id="saldoRestanteText" class="text-orange-600 font-bold">$0 ARS</span>
                     </div>
                     <div class="w-full bg-gray-200 rounded-full h-3 overflow-hidden shadow-inner relative flex justify-start">
-                        <div id="progressRestanteBar" class="bg-orange-500 h-full transition-all duration-500" style="width: 100%"></div>
+                        <div id="progressRestanteBar" class="bg-orange-500 h-full transition-all duration-300" style="width: 100%"></div>
                     </div>
                 </div>
             </div>
@@ -94,21 +94,21 @@
                         <label class="block text-xs font-semibold text-gray-600">Nombre Meta 1</label>
                         <input type="text" id="nombreMeta1" class="w-full px-3 py-1.5 border rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-green-600" placeholder="Ej: Hotel Principal">
                         <label class="block text-xs font-semibold text-gray-600">Valor (ARS)</label>
-                        <input type="number" id="meta1" class="w-full px-3 py-1.5 border rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-green-600" placeholder="0">
+                        <input type="number" id="meta1" class="w-full px-3 py-1.5 border rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-green-600 meta-input" placeholder="0">
                     </div>
                     <!-- Meta 2 -->
                     <div class="p-4 border rounded-lg bg-gray-50 space-y-2">
                         <label class="block text-xs font-semibold text-gray-600">Nombre Meta 2</label>
                         <input type="text" id="nombreMeta2" class="w-full px-3 py-1.5 border rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-green-600" placeholder="Ej: Hotel Secundario">
                         <label class="block text-xs font-semibold text-gray-600">Valor (ARS)</label>
-                        <input type="number" id="meta2" class="w-full px-3 py-1.5 border rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-green-600" placeholder="0">
+                        <input type="number" id="meta2" class="w-full px-3 py-1.5 border rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-green-600 meta-input" placeholder="0">
                     </div>
                     <!-- Meta 3 -->
                     <div class="p-4 border rounded-lg bg-gray-50 space-y-2">
                         <label class="block text-xs font-semibold text-gray-600">Nombre Meta 3</label>
                         <input type="text" id="nombreMeta3" class="w-full px-3 py-1.5 border rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-green-600" placeholder="Ej: Contingencia">
                         <label class="block text-xs font-semibold text-gray-600">Valor (ARS)</label>
-                        <input type="number" id="meta3" class="w-full px-3 py-1.5 border rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-green-600" placeholder="0">
+                        <input type="number" id="meta3" class="w-full px-3 py-1.5 border rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-green-600 meta-input" placeholder="0">
                     </div>
                 </div>
                 <div class="mt-4 pt-4 border-t flex justify-between text-sm text-gray-600">
@@ -190,6 +190,7 @@
         const db = getFirestore(app);
 
         let editandoId = null;
+        let totalRecaudadoGlobal = 0;
 
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
@@ -204,41 +205,60 @@
             }
         });
 
+        // Función centralizada para recalcular barras en tiempo real
+        window.actualizarBarrasEnVivo = function() {
+            const m1 = Number(document.getElementById('meta1').value) || 0;
+            const m2 = Number(document.getElementById('meta2').value) || 0;
+            const m3 = Number(document.getElementById('meta3').value) || 0;
+            const n1 = document.getElementById('nombreMeta1').value || "Meta 1";
+            const n2 = document.getElementById('nombreMeta2').value || "Meta 2";
+            const n3 = document.getElementById('nombreMeta3').value || "Meta 3";
+
+            const totalMetas = m1 + m2 + m3;
+            document.getElementById('totalMetasText').innerText = `$${totalMetas.toLocaleString()} ARS`;
+            document.getElementById('headerTotalMetasText').innerText = `$${totalMetas.toLocaleString()} ARS`;
+            document.getElementById('nombresMetasResumen').innerText = `(${n1}, ${n2}, ${n3})`;
+
+            // Barra 1: Creciente
+            let porcentajeCreciente = totalMetas > 0 ? Math.min(Math.round((totalRecaudadoGlobal / totalMetas) * 100), 100) : 0;
+            const barCreciente = document.getElementById('progressBar');
+            barCreciente.style.width = `${porcentajeCreciente}%`;
+            barCreciente.innerText = `${porcentajeCreciente}%`;
+
+            // Barra 2: Saldo Pendiente (Decreciente: Arranca al 100% y descuenta proporcionalmente)
+            let saldoRestante = Math.max(totalMetas - totalRecaudadoGlobal, 0);
+            let porcentajeRestante = totalMetas > 0 ? Math.max(Math.min(Math.round((saldoRestante / totalMetas) * 100), 100), 0) : (totalRecaudadoGlobal > 0 ? 0 : 100);
+            
+            document.getElementById('saldoRestanteText').innerText = `$${saldoRestante.toLocaleString()} ARS`;
+            const barRestante = document.getElementById('progressRestanteBar');
+            barRestante.style.width = `${porcentajeRestante}%`;
+        };
+
+        // Escuchar cambios en los inputs de metas para respuesta inmediata
+        ['meta1', 'meta2', 'meta3', 'nombreMeta1', 'nombreMeta2', 'nombreMeta3'].forEach(id => {
+            document.getElementById(id).addEventListener('input', window.actualizarBarrasEnVivo);
+        });
+
         async function cargarDatos() {
             try {
                 const metaDoc = await getDoc(doc(db, "configuracion", "metas"));
-                let m1 = 0, m2 = 0, m3 = 0;
-                let n1 = "Meta 1", n2 = "Meta 2", n3 = "Meta 3";
-                
                 if(metaDoc.exists()) {
                     const data = metaDoc.data();
-                    m1 = Number(data.meta1) || 0;
-                    m2 = Number(data.meta2) || 0;
-                    m3 = Number(data.meta3) || 0;
-                    n1 = data.nombreMeta1 || "Meta 1";
-                    n2 = data.nombreMeta2 || "Meta 2";
-                    n3 = data.nombreMeta3 || "Meta 3";
-
-                    document.getElementById('meta1').value = m1;
-                    document.getElementById('meta2').value = m2;
-                    document.getElementById('meta3').value = m3;
-                    document.getElementById('nombreMeta1').value = n1;
-                    document.getElementById('nombreMeta2').value = n2;
-                    document.getElementById('nombreMeta3').value = n3;
+                    document.getElementById('meta1').value = data.meta1 || 0;
+                    document.getElementById('meta2').value = data.meta2 || 0;
+                    document.getElementById('meta3').value = data.meta3 || 0;
+                    document.getElementById('nombreMeta1').value = data.nombreMeta1 || "";
+                    document.getElementById('nombreMeta2').value = data.nombreMeta2 || "";
+                    document.getElementById('nombreMeta3').value = data.nombreMeta3 || "";
                 }
-                const totalMetas = m1 + m2 + m3;
-                document.getElementById('totalMetasText').innerText = `$${totalMetas.toLocaleString()} ARS`;
-                document.getElementById('headerTotalMetasText').innerText = `$${totalMetas.toLocaleString()} ARS`;
-                
-                document.getElementById('nombresMetasResumen').innerText = `(${n1}, ${n2}, ${n3})`;
 
                 const querySnapshot = await getDocs(collection(db, "transacciones"));
-                let totalRecaudado = 0;
+                totalRecaudadoGlobal = 0;
                 let html = "";
                 
                 querySnapshot.forEach((docSnap) => {
                     const t = docSnap.data();
-                    totalRecaudado += Number(t.monto);
+                    totalRecaudadoGlobal += Number(t.monto);
                     html += `
                         <tr class="hover:bg-gray-50">
                             <td class="p-3">${t.fecha}</td>
@@ -254,21 +274,11 @@
                 });
 
                 document.getElementById('tablaTransacciones').innerHTML = html || `<tr><td colspan="5" class="text-center p-4 text-gray-400">No hay ingresos registrados.</td></tr>`;
-                document.getElementById('totalRecaudadoText').innerText = `$${totalRecaudado.toLocaleString()} ARS`;
-                document.getElementById('headerRecaudadoText').innerText = `$${totalRecaudado.toLocaleString()}`;
+                document.getElementById('totalRecaudadoText').innerText = `$${totalRecaudadoGlobal.toLocaleString()} ARS`;
+                document.getElementById('headerRecaudadoText').innerText = `$${totalRecaudadoGlobal.toLocaleString()}`;
 
-                // Barra 1: Creciente de recaudación (0% a 100% de izquierda a derecha)
-                let porcentaje = totalMetas > 0 ? Math.min(Math.round((totalRecaudado / totalMetas) * 100), 100) : 0;
-                const bar = document.getElementById('progressBar');
-                bar.style.width = `${porcentaje}%`;
-                bar.innerText = `${porcentaje}%`;
-
-                // Barra 2: Saldo Pendiente (Decreciente: Comienza llena al 100% y se achica descontando)
-                let saldoRestante = Math.max(totalMetas - totalRecaudado, 0);
-                let porcentajeRestante = totalMetas > 0 ? Math.max(Math.round((saldoRestante / totalMetas) * 100), 0) : (totalRecaudado > 0 ? 0 : 100);
-                document.getElementById('saldoRestanteText').innerText = `$${saldoRestante.toLocaleString()} ARS`;
-                const barRestante = document.getElementById('progressRestanteBar');
-                barRestante.style.width = `${porcentajeRestante}%`;
+                // Actualizar barras y totales
+                window.actualizarBarrasEnVivo();
 
                 // Event Listeners dinámicos para Editar y Eliminar
                 document.querySelectorAll('.btn-editar').forEach(btn => {
