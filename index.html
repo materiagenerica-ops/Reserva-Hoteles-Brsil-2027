@@ -71,18 +71,19 @@
                 <h1 class="text-2xl font-bold" style="color: #1e293b;">Control Presupuesto</h1>
                 <p class="text-sm text-gray">Hoteles Brasil 2027</p>
             </div>
-            <form id="loginForm" class="space-y-4">
+            <!-- Uso de onclick directo para garantizar respuesta absoluta -->
+            <div class="space-y-4">
                 <div>
                     <label class="text-sm font-bold text-gray" style="display: block; margin-bottom: 0.25rem;">Usuario</label>
-                    <input type="text" id="userInput" required placeholder="Usuario">
+                    <input type="text" id="userInput" placeholder="Usuario">
                 </div>
                 <div>
                     <label class="text-sm font-bold text-gray" style="display: block; margin-bottom: 0.25rem;">Contraseña</label>
-                    <input type="password" id="passInput" required placeholder="••••••••">
+                    <input type="password" id="passInput" placeholder="••••••••">
                 </div>
                 <div id="loginError" class="text-red text-sm text-center hidden">Usuario o contraseña incorrectos.</div>
-                <button type="submit" class="btn-green">Ingresar</button>
-            </form>
+                <button type="button" onclick="ejecutarLogin()" class="btn-green">Ingresar</button>
+            </div>
         </div>
     </div>
 
@@ -236,24 +237,20 @@
         let editandoId = null;
         let totalRecaudadoGlobal = 0;
 
-        // LOGIN VALIDATION
-        const loginForm = document.getElementById('loginForm');
-        if (loginForm) {
-            loginForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                const u = document.getElementById('userInput').value.trim();
-                const p = document.getElementById('passInput').value.trim();
-                
-                if (u === 'DRPEREYRA' && p === '235689') {
-                    document.getElementById('loginScreen').classList.add('hidden');
-                    document.getElementById('mainApp').classList.remove('hidden');
-                    document.getElementById('loginError').classList.add('hidden');
-                    cargarDatos();
-                } else {
-                    document.getElementById('loginError').classList.remove('hidden');
-                }
-            });
-        }
+        // FUNCIÓN GLOBAL DE LOGIN DIRECTA
+        window.ejecutarLogin = function() {
+            const u = document.getElementById('userInput').value.trim();
+            const p = document.getElementById('passInput').value.trim();
+            
+            if (u === 'DRPEREYRA' && p === '235689') {
+                document.getElementById('loginScreen').classList.add('hidden');
+                document.getElementById('mainApp').classList.remove('hidden');
+                document.getElementById('loginError').classList.add('hidden');
+                cargarDatos();
+            } else {
+                document.getElementById('loginError').classList.remove('hidden');
+            }
+        };
 
         window.actualizarBarrasEnVivo = function() {
             const m1 = Number(document.getElementById('meta1').value) || 0;
